@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShopEasy | E-Commerce Management System</title>
+<style>
+:root{--p:#6366f1;--p2:#8b5cf6;--bg:#f4f5fb;--card:#fff;--tx:#1e1b3a;--mut:#6b7280;--ok:#10b981;--bad:#ef4444;--warn:#f59e0b;--bd:#e5e7eb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+header.top{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:12px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;position:sticky;top:0;z-index:10;box-shadow:0 4px 20px rgba(99,102,241,.35)}
+.brand{font-size:22px;font-weight:800;letter-spacing:.3px}
+#nav{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+#nav button{background:transparent;border:0;color:#e0e0ff;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600}
+#nav button:hover{background:rgba(255,255,255,.15)}
+#nav button.on{background:#fff;color:var(--p)}
+#userbox{display:flex;gap:10px;align-items:center}
+.chip{background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;font-size:14px}
+.badge{background:var(--bad);color:#fff;border-radius:10px;padding:1px 7px;font-size:12px;margin-left:4px}
+main{max-width:1150px;margin:26px auto;padding:0 18px}
+h1{font-size:26px;margin-bottom:6px}h2{font-size:20px;margin-bottom:12px}
+.sub{color:var(--mut);margin-bottom:18px}
+.btn{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:0;padding:10px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;transition:.15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(99,102,241,.35)}
+.btn.ghost{background:rgba(255,255,255,.2);box-shadow:none}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn.red{background:var(--bad)}.btn.green{background:var(--ok)}.btn.grey{background:#e5e7eb;color:var(--tx)}
+input,select{padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;background:#fff;width:100%;font-family:inherit}
+input:focus,select:focus{outline:none;border-color:var(--p)}
+.card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(30,27,58,.07)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.bar input{flex:1;min-width:200px}.bar select{width:180px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.prod{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(30,27,58,.07);transition:.2s;display:flex;flex-direction:column}
+.prod:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(99,102,241,.2)}
+.pic{font-size:60px;text-align:center;padding:22px 0}
+.Electronics{background:linear-gradient(135deg,#dbeafe,#e0e7ff)}.Clothing{background:linear-gradient(135deg,#fce7f3,#fae8ff)}.Grocery{background:linear-gradient(135deg,#dcfce7,#fef9c3)}
+.pb{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pname{font-weight:700;font-size:17px}.meta{color:var(--mut);font-size:13px}
+.price{font-size:20px;font-weight:800;color:var(--p)}
+.stock{font-size:12px;font-weight:700}.ok{color:var(--ok)}.low{color:var(--warn)}.out{color:var(--bad)}
+.row{display:flex;gap:8px;align-items:center;margin-top:auto}.row input{width:64px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;color:var(--mut);text-transform:uppercase;padding:8px;border-bottom:2px solid var(--bd)}
+td{padding:10px 8px;border-bottom:1px solid var(--bd);font-size:14px;vertical-align:middle}
+td input{padding:6px 8px;font-size:13px}
+.wrap{overflow-x:auto}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+@media(max-width:800px){.two,.auth{grid-template-columns:1fr!important}}
+.sum div{display:flex;justify-content:space-between;padding:6px 0}
+.sum .tot{font-size:20px;font-weight:800;border-top:2px solid var(--bd);margin-top:6px;padding-top:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.offer{background:#eef2ff;color:var(--p);border:1.5px dashed var(--p);padding:6px 10px;border-radius:10px;font-size:12px;cursor:pointer;font-weight:600}
+.status{padding:4px 10px;border-radius:12px;font-size:12px;font-weight:700;display:inline-block}
+.s-CREATED{background:#e5e7eb}.s-CONFIRMED{background:#dbeafe;color:#1d4ed8}.s-SHIPPED{background:#fef3c7;color:#b45309}.s-DELIVERED{background:#d1fae5;color:#047857}.s-CANCELLED{background:#fee2e2;color:#b91c1c}
+.order{margin-bottom:14px}.ohead{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.stat{color:#fff;border-radius:16px;padding:20px}
+.stat b{font-size:28px;display:block}
+.g1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.g2{background:linear-gradient(135deg,#10b981,#34d399)}.g3{background:linear-gradient(135deg,#f59e0b,#fbbf24)}.g4{background:linear-gradient(135deg,#ec4899,#f472b6)}
+.hbar{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px}
+.hbar span.l{width:100px}.hbar .fill{height:16px;border-radius:8px;background:linear-gradient(90deg,var(--p),var(--p2));min-width:4px}
+.auth{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:center;margin-top:30px}
+.hero h1{font-size:40px;line-height:1.15;background:linear-gradient(135deg,var(--p),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:14px 0;color:var(--mut);font-size:17px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tabs button{flex:1;padding:10px;border:0;border-radius:10px;background:#eef2ff;color:var(--p);font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--p);color:#fff}
+.form{display:flex;flex-direction:column;gap:10px}
+.hint{background:#fef9c3;border-radius:10px;padding:10px;font-size:13px;margin-top:12px}
+.modal{position:fixed;inset:0;background:rgba(20,18,50,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.show{display:flex}.mbox{background:#fff;border-radius:18px;padding:24px;width:100%;max-width:440px;max-height:92vh;overflow:auto}
+.pay{display:flex;gap:8px;margin:12px 0}
+.pay label{flex:1;border:2px solid var(--bd);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-weight:700;font-size:14px}
+.pay input{display:none}.pay label.on{border-color:var(--p);background:#eef2ff;color:var(--p)}
+#toasts{position:fixed;top:80px;right:18px;z-index:99;display:flex;flex-direction:column;gap:8px}
+.toast{background:#1e1b3a;color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-size:14px;max-width:340px;border-left:5px solid var(--ok)}
+.toast.bad{border-left-color:var(--bad)}
+.empty{text-align:center;color:var(--mut);padding:40px}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:30px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">🛍️ ShopEasy</div>
+  <div id="nav"></div>
+  <div id="userbox"></div>
+</header>
+<main id="app"></main>
+
+<div id="toasts"></div>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const money = n => '₹' + Number(n).toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 2});
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ICONS = [['laptop','💻'],['mobile','📱'],['headphone','🎧'],['television','📺'],['t-shirt','👕'],['shirt','👔'],['jeans','👖'],['shoe','👟'],['rice','🍚'],['sugar','🧂'],['oil','🛢️'],['biscuit','🍪']];
+function icon(p) {
+  const n = p.name.toLowerCase();
+  for (const [k, v] of ICONS) if (n.includes(k)) return v;
+  return {Electronics:'🔌', Clothing:'🧥', Grocery:'🛒'}[p.category] || '📦';
+}
+
+let user = null, view = 'shop', cat = 'All', q = '';
+let cart = {items: [], subtotal: 0, discountAmount: 0, total: 0};
+let authMode = 'login', timer = null;
+
+async function api(path, params = {}) {
+  const body = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => { if (v !== undefined && v !== null) body.append(k, v); });
+  const r = await fetch('/api/' + path, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body});
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error);
+  return j.data;
+}
+async function run(fn) { try { await fn(); } catch (e) { toast(e.message, 'bad'); } }
+function toast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+const who = () => user.role === 'ADMIN' ? {adminId: user.id} : {customerId: user.id};
+const cartCount = () => cart.items.reduce((a, i) => a + i.quantity, 0);
+function showModal(html) { $('#mbox').innerHTML = html; $('#modal').classList.add('show'); }
+function hideModal() { $('#modal').classList.remove('show'); }
+
+// ------------------------------------------------------------ navigation
+async function go(v) {
+  view = v;
+  if (user && user.role !== 'ADMIN') await refreshCart();
+  render();
+}
+async function refreshCart() {
+  try { cart = await api('cart', who()); } catch (e) { /* ignore */ }
+}
+function render() {
+  const nav = $('#nav'), ub = $('#userbox');
+  if (!user) { nav.innerHTML = ''; ub.innerHTML = ''; return viewAuth(); }
+  const items = user.role === 'ADMIN'
+    ? [['dash','📊 Dashboard'], ['aprod','📦 Products'], ['aord','🧾 Orders']]
+    : [['shop','🛍️ Shop'], ['cart','🛒 Cart' + (cartCount() ? ` <span class="badge">${cartCount()}</span>` : '')], ['orders','📜 My Orders']];
+  nav.innerHTML = items.map(([k, l]) => `<button class="${view === k ? 'on' : ''}" onclick="go('${k}')">${l}</button>`).join('');
+  ub.innerHTML = `<span class="chip">${user.role === 'ADMIN' ? '👑' : '👤'} ${esc(user.name)}</span><button class="btn ghost sm" onclick="logout()">Logout</button>`;
+  ({shop: viewShop, cart: viewCart, orders: viewOrders, dash: viewDash, aprod: viewAProd, aord: viewAOrd}[view])();
+}
+
+// ------------------------------------------------------------ login / register
+function viewAuth() {
+  $('#app').innerHTML = `
+  <div class="auth">
+    <div class="hero">
+      <h1>Shop smarter.<br>Manage easier.</h1>
+      <p>A complete E-Commerce Management System built with Core Java: products, cart, discounts, payments and orders.</p>
+      <p>💻 Electronics &nbsp; 👕 Clothing &nbsp; 🍚 Grocery</p>
+    </div>
+    <div class="card">
+      <div class="tabs">
+        <button class="${authMode === 'login' ? 'on' : ''}" onclick="setAuth('login')">Login</button>
+        <button class="${authMode === 'register' ? 'on' : ''}" onclick="setAuth('register')">Register</button>
+      </div>
+      ${authMode === 'login' ? `
+      <div class="form">
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="btn" onclick="doLogin()">Login</button>
+      </div>
+      <div class="hint">🔑 <b>Admin demo:</b> admin@shop.com / admin123<br>New here? Click <b>Register</b> to create a customer account.</div>` : `
+      <div class="form">
+        <input id="rname" placeholder="Full name">
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password (min 4 characters)">
+        <input id="raddr" placeholder="Address">
+        <button class="btn" onclick="doRegister()">Create account</button>
+      </div>`}
+    </div>
+  </div>`;
+}
+function setAuth(m) { authMode = m; viewAuth(); }
+function saveUser() { try { sessionStorage.setItem('user', JSON.stringify(user)); } catch (e) {} }
+function doLogin() {
+  run(async () => {
+    user = await api('login', {email: $('#email').value, password: $('#password').value});
+    saveUser();
+    toast('Welcome, ' + user.name + '!');
+    go(user.role === 'ADMIN' ? 'dash' : 'shop');
+  });
+}
+function doRegister() {
+  run(async () => {
+    const email = $('#email').value, password = $('#password').value;
+    await api('register', {name: $('#rname').value, email, password, address: $('#raddr').value});
+    user = await api('login', {email, password});
+    saveUser();
+    toast('Account created. Welcome, ' + user.name + '!');
+    go('shop');
+  });
+}
+function logout() {
+  user = null; cart = {items: [], subtotal: 0, discountAmount: 0, total: 0};
+  try { sessionStorage.removeItem('user'); } catch (e) {}
+  authMode = 'login'; render();
+}
+
+// ------------------------------------------------------------ customer: shop
+function viewShop() {
+  $('#app').innerHTML = `
+    <h1>Shop</h1><p class="sub">Browse, search and add products to your cart.</p>
+    <div class="bar">
+      <input id="search" placeholder="🔍 Search by name or product ID" value="${esc(q)}" oninput="onSearch(this.value)">
+      <select onchange="cat=this.value;loadGrid()">
+        ${['All','Electronics','Clothing','Grocery'].map(c => `<option ${c === cat ? 'selected' : ''}>${c}</option>`).join('')}
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>`;
+  loadGrid();
+}
+function onSearch(v) { q = v; clearTimeout(timer); timer = setTimeout(loadGrid, 250); }
+function stockLabel(s) {
+  return s === 0 ? '<span class="stock out">Out of stock</span>'
+       : s <= 10 ? `<span class="stock low">Only ${s} left</span>`
+       : `<span class="stock ok">In stock (${s})</span>`;
+}
+function loadGrid() {
+  run(async () => {
+    const list = await api('products', {q, category: cat});
+    $('#grid').innerHTML = list.length ? list.map(p => `
+      <div class="prod">
+        <div class="pic ${p.category}">${icon(p)}</div>
+        <div class="pb">
+          <div class="pname">${esc(p.name)}</div>
+          <div class="meta">#${p.id} &bull; ${p.category} &bull; ${p.attributeLabel}: ${esc(p.attribute)}</div>
+          <div class="price">${money(p.price)}</div>
+          ${stockLabel(p.stock)}
+          <div class="row">
+            <input type="number" min="1" value="1" id="qty${p.id}" ${p.stock === 0 ? 'disabled' : ''}>
+            <button class="btn sm" style="flex:1" ${p.stock === 0 ? 'disabled' : ''} onclick="addCart(${p.id})">Add to cart</button>
+          </div>
+        </div>
+      </div>`).join('') : '<div class="empty">No products found 😕</div>';
+  });
+}
+function addCart(id) {
+  run(async () => {
+    cart = await api('cart/add', {...who(), productId: id, quantity: $('#qty' + id).value});
+    toast('Added to cart 🛒');
+    render();
+  });
+}
+
+// ------------------------------------------------------------ customer: cart
+function viewCart() {
+  run(async () => {
+    const offers = await api('discounts');
+    if (!cart.items.length) {
+      $('#app').innerHTML = '<h1>Your Cart</h1><div class="card empty">Your cart is empty 🛒<br><br><button class="btn" onclick="go(\'shop\')">Start shopping</button></div>';
+      return;
+    }
+    $('#app').innerHTML = `
+    <h1>Your Cart</h1><p class="sub">Change quantities, apply a discount, then checkout.</p>
+    <div class="two">
+      <div class="card wrap"><table>
+        <tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
+        ${cart.items.map(i => `<tr>
+          <td><b>${esc(i.name)}</b><br><span class="meta">${i.category}</span></td>
+          <td>${money(i.price)}</td>
+          <td><input type="number" min="1" max="${i.stock}" value="${i.quantity}" style="width:70px" onchange="updQty(${i.productId}, this.value)"></td>
+          <td><b>${money(i.total)}</b></td>
+          <td><button class="btn red sm" onclick="rmItem(${i.productId})">Remove</button></td></tr>`).join('')}
+      </table></div>
+      <div class="card sum">
+        <h2>Order Summary</h2>
+        <div><span>Subtotal</span><b>${money(cart.subtotal)}</b></div>
+        <div style="color:var(--ok)"><span>Discount ${cart.discountCode ? '(' + esc(cart.discountCode) + ')' : ''}</span><b>- ${money(cart.discountAmount)}</b></div>
+        <div class="tot"><span>Total</span><span>${money(cart.total)}</span></div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <input id="code" placeholder="Discount code">
+          <button class="btn sm" onclick="applyCode()">Apply</button>
+        </div>
+        <div class="chips">${offers.map(o => `<span class="offer" title="${esc(o.description)}" onclick="applyCode('${o.code}')">${o.code}: ${esc(o.description)}</span>`).join('')}</div>
+        ${cart.discountCode ? '<button class="btn grey sm" onclick="clearCode()">Remove discount</button>' : ''}
+        <button class="btn green" style="width:100%;margin-top:14px;padding:13px" onclick="openCheckout()">Checkout &rarr;</button>
+      </div>
+    </div>`;
+  });
+}
+function updQty(id, v) { run(async () => { cart = await api('cart/update', {...who(), productId: id, quantity: v}); render(); }); }
+function rmItem(id) { run(async () => { cart = await api('cart/remove', {...who(), productId: id}); toast('Removed from cart'); render(); }); }
+function applyCode(c) {
+  run(async () => {
+    const code = c || $('#code').value;
+    cart = await api('cart/discount', {...who(), code});
+    toast('Discount applied 🎉'); render();
+  });
+}
+function clearCode() { run(async () => { cart = await api('cart/discount/clear', who()); render(); }); }
+
+// ------------------------------------------------------------ checkout + payment
+function openCheckout() {
+  showModal(`
+    <h2>💳 Payment</h2>
+    <p>Amount payable: <b style="font-size:22px;color:var(--p)">${money(cart.total)}</b></p>
+    <div class="pay">
+      <label id="lb-UPI" onclick="setPay('UPI')">📲 UPI</label>
+      <label id="lb-CARD" onclick="setPay('CARD')">💳 Card</label>
+      <label id="lb-COD" onclick="setPay('COD')">💵 Cash on Delivery</label>
+    </div>
+    <div id="payfields" class="form"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn grey" style="flex:1" onclick="hideModal()">Cancel</button>
+      <button class="btn green" style="flex:2" onclick="doPay()">Pay &amp; Place Order</button>
+    </div>`);
+  setPay('UPI');
+}
+let payMethod = 'UPI';
+function setPay(m) {
+  payMethod = m;
+  ['UPI', 'CARD', 'COD'].forEach(x => $('#lb-' + x).classList.toggle('on', x === m));
+  $('#payfields').innerHTML = m === 'UPI' ? '<input id="upiId" placeholder="UPI ID (example: john@upi)">'
+    : m === 'CARD' ? '<input id="cardNumber" placeholder="Card number (16 digits)" maxlength="19"><input id="cardHolder" placeholder="Card holder name"><input id="cvv" type="password" placeholder="CVV (3 digits)" maxlength="3"><div class="meta">Demo only: use any 16-digit number.</div>'
+    : '<div class="hint">You will pay in cash when the order is delivered.</div>';
+}
+function doPay() {
+  run(async () => {
+    const g = id => $('#' + id) ? $('#' + id).value : undefined;
+    const order = await api('checkout', {...who(), method: payMethod, upiId: g('upiId'), cardNumber: g('cardNumber'), cardHolder: g('cardHolder'), cvv: g('cvv')});
+    cart = {items: [], subtotal: 0, discountAmount: 0, total: 0};
+    showModal(`
+      <div style="text-align:center">
+        <div style="font-size:60px">✅</div>
+        <h2>Order Confirmed!</h2>
+        <p class="sub">Order #${order.id} &bull; ${order.paymentMethod}</p>
+        <p>Paid: <b>${money(order.total)}</b></p>
+        <p class="meta">Ref: ${esc(order.paymentReference)}</p><br>
+        <button class="btn" onclick="hideModal();go('orders')">View My Orders</button>
+      </div>`);
+    render();
+  });
+}
+
+// ------------------------------------------------------------ customer: orders
+function orderCard(o, admin) {
+  const canCancel = admin ? (o.status === 'CONFIRMED' || o.status === 'SHIPPED' || o.status === 'CREATED') : (o.status === 'CONFIRMED' || o.status === 'CREATED');
+  return `<div class="card order">
+    <div class="ohead">
+      <div><b>Order #${o.id}</b> ${admin ? '&bull; ' + esc(o.customerName) : ''}<br><span class="meta">${o.createdAt} &bull; ${o.paymentMethod} (${esc(o.paymentReference)})</span></div>
+      <span class="status s-${o.status}">${o.status}</span>
+    </div>
+    <div class="wrap"><table>${o.items.map(i => `<tr><td>${esc(i.name)}</td><td>${i.quantity} × ${money(i.unitPrice)}</td><td style="text-align:right">${money(i.total)}</td></tr>`).join('')}</table></div>
+    <div class="ohead" style="margin-top:10px">
+      <div class="meta">Subtotal ${money(o.subtotal)} &bull; Discount ${money(o.discount)}</div>
+      <div><b style="font-size:18px">${money(o.total)}</b></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${admin && o.status === 'CONFIRMED' ? `<button class="btn sm" onclick="setStatus(${o.id},'SHIPPED')">🚚 Mark Shipped</button>` : ''}
+      ${admin && o.status === 'SHIPPED' ? `<button class="btn green sm" onclick="setStatus(${o.id},'DELIVERED')">📦 Mark Delivered</button>` : ''}
+      ${canCancel ? `<button class="btn red sm" onclick="setStatus(${o.id},'CANCELLED')">Cancel order</button>` : ''}
+    </div></div>`;
+}
+function viewOrders() {
+  run(async () => {
+    const list = await api('orders', who());
+    $('#app').innerHTML = '<h1>My Orders</h1><p class="sub">Your order history.</p>' +
+      (list.length ? list.map(o => orderCard(o, false)).join('') : '<div class="card empty">No orders yet 📭</div>');
+  });
+}
+function setStatus(id, status) {
+  run(async () => {
+    await api('order/status', {...who(), orderId: id, status});
+    toast('Order #' + id + ' is now ' + status);
+    render();
+  });
+}
+
+// ------------------------------------------------------------ admin: dashboard
+function viewDash() {
+  run(async () => {
+    const s = await api('stats', who());
+    const maxSale = Math.max(1, ...Object.values(s.salesByCategory));
+    $('#app').innerHTML = `
+    <h1>Admin Dashboard</h1><p class="sub">Live overview of your store.</p>
+    <div class="stats">
+      <div class="stat g1">Revenue<b>${money(s.revenue)}</b></div>
+      <div class="stat g2">Orders<b>${s.totalOrders}</b></div>
+      <div class="stat g3">Products<b>${s.totalProducts}</b></div>
+      <div class="stat g4">Customers<b>${s.totalCustomers}</b></div>
+    </div>
+    <div class="two" style="grid-template-columns:1fr 1fr">
+      <div class="card"><h2>Sales by category</h2>
+        ${Object.keys(s.salesByCategory).length ? Object.entries(s.salesByCategory).map(([k, v]) => `<div class="hbar"><span class="l">${k}</span><div class="fill" style="width:${v / maxSale * 60}%"></div><b>${money(v)}</b></div>`).join('') : '<p class="meta">No sales yet.</p>'}
+        <h2 style="margin-top:20px">Orders by status</h2>
+        ${Object.entries(s.ordersByStatus).map(([k, v]) => `<div class="hbar"><span class="l"><span class="status s-${k}">${k}</span></span><b>${v}</b></div>`).join('')}
+      </div>
+      <div class="card"><h2>⚠️ Low stock (10 or fewer)</h2>
+        ${s.lowStock.length ? s.lowStock.map(p => `<div class="hbar"><span style="flex:1">${icon(p)} ${esc(p.name)}</span><b class="${p.stock === 0 ? 'out' : 'low'}">${p.stock} left</b></div>`).join('') : '<p class="meta">All products are well stocked ✅</p>'}
+      </div>
+    </div>`;
+  });
+}
+
+// ------------------------------------------------------------ admin: products
+function viewAProd() {
+  run(async () => {
+    const list = await api('products', {q: '', category: 'All'});
+    $('#app').innerHTML = `
+    <h1>Manage Products</h1><p class="sub">Add, search, update price/stock, or remove products.</p>
+    <div class="card" style="margin-bottom:18px"><h2>➕ Add new product</h2>
+      <div class="bar" style="margin:0">
+        <select id="ncat" onchange="$('#nattr').placeholder={Electronics:'Brand',Clothing:'Size',Grocery:'Pack size'}[this.value]"><option>Electronics</option><option>Clothing</option><option>Grocery</option></select>
+        <input id="nname" placeholder="Product name">
+        <input id="nprice" type="number" min="0" placeholder="Price">
+        <input id="nstock" type="number" min="0" placeholder="Stock">
+        <input id="nattr" placeholder="Brand">
+        <input id="nid" type="number" placeholder="ID (optional)" style="width:130px">
+        <button class="btn" onclick="addProd()">Add</button>
+      </div></div>
+    <div class="bar"><input id="asearch" placeholder="🔍 Search products" oninput="filterRows(this.value)"></div>
+    <div class="card wrap"><table id="ptable">
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Price (₹)</th><th>Stock</th><th>Brand/Size/Pack</th><th>Actions</th></tr>
+      ${list.map(p => `<tr data-s="${esc(p.name.toLowerCase())} ${p.id}">
+        <td>${p.id}</td>
+        <td><input id="n${p.id}" value="${esc(p.name)}"></td>
+        <td>${icon(p)} ${p.category}</td>
+        <td><input id="p${p.id}" type="number" min="0" value="${p.price}" style="width:100px"></td>
+        <td><input id="s${p.id}" type="number" min="0" value="${p.stock}" style="width:80px"></td>
+        <td><input id="a${p.id}" value="${esc(p.attribute)}" style="width:100px"></td>
+        <td style="white-space:nowrap"><button class="btn sm" onclick="saveProd(${p.id})">Save</button> <button class="btn red sm" onclick="delProd(${p.id})">Delete</button></td>
+      </tr>`).join('')}
+    </table></div>`;
+  });
+}
+function filterRows(v) {
+  v = v.toLowerCase().trim();
+  document.querySelectorAll('#ptable tr[data-s]').forEach(r => r.style.display = r.dataset.s.includes(v) ? '' : 'none');
+}
+function addProd() {
+  run(async () => {
+    await api('product/add', {...who(), category: $('#ncat').value, name: $('#nname').value, price: $('#nprice').value, stock: $('#nstock').value, attribute: $('#nattr').value, id: $('#nid').value});
+    toast('Product added ✅'); viewAProd();
+  });
+}
+function saveProd(id) {
+  run(async () => {
+    await api('product/update', {...who(), id, name: $('#n' + id).value, price: $('#p' + id).value, stock: $('#s' + id).value, attribute: $('#a' + id).value});
+    toast('Product ' + id + ' updated ✅');
+  });
+}
+function delProd(id) {
+  if (!confirm('Remove product ' + id + '?')) return;
+  run(async () => { await api('product/delete', {...who(), id}); toast('Product removed'); viewAProd(); });
+}
+
+// ------------------------------------------------------------ admin: orders
+function viewAOrd() {
+  run(async () => {
+    const list = await api('orders', who());
+    $('#app').innerHTML = '<h1>Customer Orders</h1><p class="sub">Ship, deliver or cancel orders.</p>' +
+      (list.length ? list.map(o => orderCard(o, true)).join('') : '<div class="card empty">No orders yet 📭</div>');
+  });
+}
+
+// ------------------------------------------------------------ start
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') hideModal(); });
+try { const s = sessionStorage.getItem('user'); if (s) { user = JSON.parse(s); view = user.role === 'ADMIN' ? 'dash' : 'shop'; } } catch (e) {}
+user ? go(view) : render();
+</script>
+</body>
+</html>
